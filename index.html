@@ -1,0 +1,363 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSRTC Conductor Prep 2026</title>
+    
+    <style>
+        :root {
+            --primary: #0b2545;
+            --secondary: #134074;
+            --accent: #ee6c4d;
+            --light: #f4f6f9;
+            --dark: #111827; /* Leonardo.ai jaisa dark gray/black background */
+            --sidebar-bg: #1e293b;
+            --success: #2ec4b6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--light); color: #1d2d44; position: relative; overflow-x: hidden; }
+
+        /* HEADER & MENU BAR */
+        .top-navbar {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .menu-trigger { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: white; }
+
+        header { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; text-align: center; padding: 2.5rem 1rem; 
+            border-bottom: 5px solid var(--accent); border-radius: 0 0 20px 20px; margin-bottom: 1.5rem;
+        }
+
+        /* SCREENS SYSTEM */
+        .screen { display: none; padding: 1rem; max-width: 800px; margin: 0 auto; }
+        .active { display: block; }
+
+        /* SUBJECT CARDS STYLING */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; margin-top: 1.5rem; }
+        @media(min-width: 600px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+        .card { 
+            background: white; padding: 1.5rem; border-radius: 12px; 
+            border-left: 6px solid var(--secondary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            cursor: pointer; font-weight: bold; font-size: 1.05rem; 
+            display: flex; align-items: center; justify-content: space-between; transition: 0.2s;
+        }
+        .card:hover { transform: translateX(5px); }
+        .sub-perc { font-size: 0.9rem; color: var(--accent); background: #fff0ec; padding: 4px 10px; border-radius: 20px; margin-top: 5px; display: inline-block; }
+
+        /* LIST ITEMS */
+        .list-item { 
+            background: white; padding: 1.2rem 1.5rem; margin-bottom: 0.8rem; 
+            border-radius: 8px; display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04); cursor: pointer; font-weight: 500; 
+        }
+        .list-item.locked { color: #888; background: #e9ecef; }
+
+        /* BUTTONS */
+        .btn { background-color: var(--accent); color: white; border: none; padding: 12px 28px; font-size: 1rem; font-weight: bold; border-radius: 30px; cursor: pointer; }
+        .back-btn { background: none; border: none; color: var(--secondary); font-weight: bold; cursor: pointer; margin-bottom: 1rem; }
+
+        /* 📱 LEONARDO.AI STYLE SIDEBAR (DRAWER) */
+        .sidebar {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+            background-color: var(--dark); color: white; z-index: 2000;
+            transition: 0.3s ease; padding: 20px; box-shadow: 5px 0 25px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column;
+        }
+        .sidebar.open { left: 0; }
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1999; display: none;
+        }
+        .sidebar-overlay.show { display: block; }
+
+        .sidebar-close { align-self: flex-end; background: none; border: none; color: #9ca3af; font-size: 1.5rem; cursor: pointer; }
+        .sidebar-brand { font-size: 1.4rem; font-weight: bold; letter-spacing: 1px; color: white; margin-bottom: 20px; text-align: left; border-bottom: 1px solid #374151; padding-bottom: 10px; }
+        
+        /* PROFILE BOX INSIDE SIDEBAR */
+        .profile-section { background: #1e293b; padding: 15px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; }
+        .profile-left { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 40px; height: 40px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .profile-info { text-align: left; }
+        .profile-name { font-weight: bold; font-size: 0.95rem; color: #f3f4f6; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .profile-status { font-size: 0.75rem; color: #9ca3af; margin-top: 2px; }
+        .user-total-badge { font-size: 0.85rem; font-weight: bold; color: var(--success); background: rgba(46, 196, 182, 0.1); padding: 4px 8px; border-radius: 8px; }
+
+        /* SIDEBAR LINKS */
+        .sidebar-menu { list-style: none; text-align: left; flex-grow: 1; }
+        .sidebar-item { padding: 12px 15px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: #9ca3af; font-weight: 500; transition: 0.2s; }
+        .sidebar-item:hover, .sidebar-item.active-menu { background: #1e293b; color: white; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 3000; }
+        .modal-content { background: white; padding: 2rem; border-radius: 15px; text-align: center; max-width: 400px; margin: 1rem; color: var(--dark); }
+    </style>
+</head>
+<body>
+
+    <div class="top-navbar">
+        <button class="menu-trigger" onclick="toggleSidebar()">☰</button>
+        <span>શ્રી સરસ્વતી કરિયર એકેડમી</span>
+    </div>
+
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div id="sidebar" class="sidebar">
+        <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+        <div class="sidebar-brand">LEONARDO.EDU</div>
+        
+        <div id="profile-area" class="profile-section">
+            </div>
+
+        <ul class="sidebar-menu">
+            <li class="sidebar-item active-menu" onclick="changeScreenFromSidebar('screen-subjects')">🏠 Home Dashboard</li>
+            <li class="sidebar-item" onclick="alert('તમારો કુલ સ્કોર પ્રોફાઇલ સેક્શનમાં જોઈ શકાય છે.')">📊 My Progress Report</li>
+            <li class="sidebar-item" onclick="alert('WhatsApp Help Support: 9999999999')">💬 Contact Support Help</li>
+        </ul>
+    </div>
+
+    <div id="screen-subjects" class="screen active">
+        <header>
+            <h1>વિષય વાઇઝ ટેસ્ટ સિરીઝ</h1>
+            <p>તમારી પ્રગતિ અને વિષય પસંદ કરો</p>
+        </header>
+        <div class="grid" id="subjects-container">
+            </div>
+    </div>
+
+    <div id="screen-type-select" class="screen">
+        <button class="back-btn" onclick="changeScreen('screen-subjects')">⬅️ પાછા જાઓ</button>
+        <header>
+            <h1 id="current-subject-name">વિષય</h1>
+            <p>તમારો ટેસ્ટ પ્રકાર પસંદ કરો</p>
+        </header>
+        <div class="grid" style="margin-top: 3rem;">
+            <div class="card" style="padding: 2.5rem; flex-direction:column; justify-content: center;" onclick="goToQuizList('Quiz')">
+                <span>Topic Quiz (ટોપિક ક્વિઝ)</span>
+                <span class="sub-perc" id="quiz-type-perc">Progress: 0%</span>
+            </div>
+            <div class="card" style="padding: 2.5rem; flex-direction:column; justify-content: center;" onclick="goToQuizList('Mock Test')">
+                <span>Full Mock Test (મોક ટેસ્ટ)</span>
+                <span class="sub-perc" id="mock-type-perc">Progress: 0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-quiz-list" class="screen">
+        <button class="back-btn" onclick="changeScreen('screen-type-select')">⬅️ પાછા જાઓ</button>
+        <header>
+            <h1 id="current-list-title">ટેસ્ટ લિસ્ટ</h1>
+            <p>પ્રેક્ટિસ શરૂ કરવા માટે ટેસ્ટ પર ક્લિક કરો</p>
+        </header>
+        <div id="dynamic-list-container" style="margin-top: 2rem;"></div>
+    </div>
+
+    <div id="paywall-modal" class="modal">
+        <div class="modal-content">
+            <h3>🔒 પ્રીમિયમ ટેસ્ટ અનલોક કરો</h3>
+            <p>આગળના બધા જ મોક ટેસ્ટ અને ક્વિઝ અનલોક કરવા માટે અત્યારે જ પ્લાન ખરીદો.</p>
+            <h2 style="color:var(--accent); margin: 15px 0;">₹149</h2>
+            <button class="btn" style="width: 100%; margin-bottom: 1rem;" onclick="simulatePayment()">Buy Now</button>
+            <button class="btn" style="background: #ccc;" onclick="closePaywall()">બંધ કરો</button>
+        </div>
+    </div>
+
+    <script>
+        const syllabusSubjects = [
+            "સામાન્ય જ્ઞાન", "કમ્પ્યુટર જ્ઞાન", "ગુજરાતી વ્યાકરણ", "અંગ્રેજી વ્યાકરણ",
+            "એપ્ટિટ્યુડ અને રીઝનીંગ", "નિગમને લગતી માહિતી", "મોટર વ્હીકલ એક્ટ", "રોડ સેફ્ટી"
+        ];
+
+        let currentSubject = ""; let currentType = "";
+        let isPremiumUser = (localStorage.getItem('gsrtc_is_premium') === 'true');
+
+        // --- SIDEBAR TOGGLE FUNCTIONS ---
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebar-overlay').classList.toggle('show');
+        }
+
+        function changeScreenFromSidebar(screenId) {
+            changeScreen(screenId);
+            toggleSidebar();
+        }
+
+        function changeScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // --- 🧮 COMPLEX PROGRESS TRACKING ANALYTICS ---
+        function getSubjectProgress(subjectName) {
+            let totalPercentageSum = 0;
+            let totalTestsCount = 20; // 10 Quizes + 10 Mock Tests
+
+            for(let i = 1; i <= 10; i++) {
+                let qScore = parseInt(localStorage.getItem(`${subjectName}_Quiz_${i}_score`)) || 0;
+                let mScore = parseInt(localStorage.getItem(`${subjectName}_Mock Test_${i}_score`)) || 0;
+                totalPercentageSum += (qScore + mScore);
+            }
+            return Math.round(totalPercentageSum / totalTestsCount);
+        }
+
+        function getTypeProgress(subjectName, typeName) {
+            let totalSum = 0;
+            for(let i = 1; i <= 10; i++) {
+                totalSum += parseInt(localStorage.getItem(`${subjectName}_${typeName}_${i}_score`)) || 0;
+            }
+            return Math.round(totalSum / 10);
+        }
+
+        function getOverallAppProgress() {
+            let totalSum = 0;
+            syllabusSubjects.forEach(sub => { totalSum += getSubjectProgress(sub); });
+            return Math.round(totalSum / syllabusSubjects.length);
+        }
+
+        // --- 👤 DYNAMIC SIDEBAR PROFILE RENDER ---
+        function updateProfileUI() {
+            const profileArea = document.getElementById('profile-area');
+            const userName = localStorage.getItem('gsrtc_logged_user');
+            const overallProgress = getOverallAppProgress();
+
+            if (userName) {
+                // User logged in hai
+                let firstLetter = userName.charAt(0);
+                profileArea.innerHTML = `
+                    <div class="profile-left">
+                        <div class="avatar">${firstLetter}</div>
+                        <div class="profile-info">
+                            <div class="profile-name">${userName}</div>
+                            <div class="profile-status">${isPremiumUser ? '👑 Premium Account' : '📝 Free Account'}</div>
+                        </div>
+                    </div>
+                    <div class="user-total-badge">${overallProgress}%</div>
+                `;
+            } else {
+                // User logged in nahi hai
+                profileArea.innerHTML = `
+                    <div class="profile-left" style="width:100%; justify-content:space-between;">
+                        <span style="font-size:0.9rem; color:#9ca3af;">તૈયારી ટ્રેક કરવા માટે:</span>
+                        <button class="btn" style="padding:6px 15px; font-size:0.85rem;" onclick="loginWithGoogle()">Login</button>
+                    </div>
+                `;
+            }
+        }
+
+        // --- 🚀 SUBJECTS GRID DISPLAY GENERATOR ---
+        function buildSubjectCards() {
+            const container = document.getElementById('subjects-container');
+            container.innerHTML = "";
+
+            syllabusSubjects.forEach((sub, index) => {
+                let progress = getSubjectProgress(sub); // Dynamic total calculation
+                const card = document.createElement('div');
+                card.className = "card";
+                card.onclick = () => goToTypeSelect(sub);
+                card.innerHTML = `
+                    <div>
+                        <div>${index + 1}. ${sub}</div>
+                        <span class="sub-perc">કુલ પ્રગતિ: ${progress}%</span>
+                    </div>
+                    <span>➔</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- NAVIGATION INTERMEDIARY STAGES ---
+        function goToTypeSelect(subjectName) {
+            currentSubject = subjectName;
+            document.getElementById('current-subject-name').innerText = subjectName;
+            
+            // Type sub-percentages refresh karo layout par
+            document.getElementById('quiz-type-perc').innerText = `Progress: ${getTypeProgress(subjectName, 'Quiz')}%`;
+            document.getElementById('mock-type-perc').innerText = `Progress: ${getTypeProgress(subjectName, 'Mock Test')}%`;
+            
+            changeScreen('screen-type-select');
+        }
+
+        function goToQuizList(type) {
+            currentType = type;
+            document.getElementById('current-list-title').innerText = `${currentSubject} - ${type}`;
+            buildQuizRows();
+            changeScreen('screen-quiz-list');
+        }
+
+        function buildQuizRows() {
+            const container = document.getElementById('dynamic-list-container');
+            container.innerHTML = "";
+
+            for (let i = 1; i <= 10; i++) {
+                let isLocked = (i > 3 && !isPremiumUser);
+                let savedScore = localStorage.getItem(`${currentSubject}_${currentType}_${i}_score`) || "0"; 
+
+                const row = document.createElement('div');
+                row.className = `list-item ${isLocked ? 'locked' : ''}`;
+                row.innerHTML = `
+                    <div>
+                        <span style="margin-right:10px;">${isLocked ? '🔒' : '🔓'}</span>
+                        <span>${currentType} નંબર - ${i}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <span style="color:var(--secondary); font-weight:bold;">${savedScore}%</span>
+                        <span style="color:#bbb;">➔</span>
+                    </div>
+                `;
+
+                row.onclick = function() {
+                    if (isLocked) {
+                        const isUserLoggedIn = localStorage.getItem('gsrtc_logged_user');
+                        if (!isUserLoggedIn) {
+                            alert("🔒 આગળના પ્રીમિયમ ટેસ્ટ માટે કૃપા કરીને પહેલા Google વડે લોગિન કરો.");
+                            loginWithGoogle();
+                        } else { openPaywall(); }
+                    } else {
+                        // URL Parameter model se variables bhejna aapke upgraded quiz-player.html file ko
+                        window.location.href = `quiz-player.html?subject=${encodeURIComponent(currentSubject)}&type=${encodeURIComponent(currentType)}&no=${i}`;
+                    }
+                };
+                container.appendChild(row);
+            }
+        }
+
+        function loginWithGoogle() {
+            const dummyName = "રાહુલ કુમાર"; // Apka profile setup custom identity logic
+            localStorage.setItem('gsrtc_logged_user', dummyName);
+            updateProfileUI();
+            buildSubjectCards();
+            alert("લોગિન સફળ રહ્યું!");
+        }
+
+        function openPaywall() { document.getElementById('paywall-modal').style.display = 'flex'; }
+        function closePaywall() { document.getElementById('paywall-modal').style.display = 'none'; }
+
+        function simulatePayment() {
+            isPremiumUser = true;
+            localStorage.setItem('gsrtc_is_premium', 'true');
+            closePaywall();
+            updateProfileUI();
+            buildSubjectCards();
+            if(currentType) buildQuizRows();
+            alert("પેમેન્ટ સફળ રહ્યું! બધા લોક ખુલી ગયા છે.");
+        }
+
+        // ENTRY STARTUP INITS
+        window.onload = function() {
+            updateProfileUI();
+            buildSubjectCards();
+        };
+    </script>
+</body>
+</html>
