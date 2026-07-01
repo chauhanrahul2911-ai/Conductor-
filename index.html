@@ -325,8 +325,9 @@
                         } else { openPaywall(); }
                     } else {
                         // URL Parameter model se variables bhejna aapke upgraded quiz-player.html file ko
-                        window.location.href = `quiz-player.html?subject=${encodeURIComponent(currentSubject)}&type=${encodeURIComponent(currentType)}&no=${i}`;
-                    }
+                        // 🎯 URL Parameter model se English Folder Name bhejna aapke upgraded quiz-player.html file ko
+const englishFolder = subjectFolderMapping[currentSubject] || currentSubject;
+window.location.href = `quiz-player.html?subject=${englishFolder}&type=${currentType}&no=${i}`;                    }
                 };
                 container.appendChild(row);
             }
