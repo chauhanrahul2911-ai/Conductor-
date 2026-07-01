@@ -133,7 +133,8 @@ async function loadQuizDataset() {
     try {
         // Aapke GitHub directory folder structure ke mutabiq link:
         // 🎯 Pura Full Address wala Fixed Fetch Code:
-const response = await fetch(`https://chauhanrahul2911-ai.github.io/Conductor-/data/${encodeURIComponent(subject)}/${type}_${quizNo}.json`);
+// 🎯 QUIZ PLAYER MEIN YE LINE WAPAS DAAL DIJIYE:
+const response = await fetch(`data/${subject}/${type}_${quizNo}.json?v=${new Date().getTime()}`);
         if(!response.ok) throw new Error("File not found");
         quizData = await response.json();
         
