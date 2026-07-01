@@ -177,7 +177,16 @@
             "સામાન્ય જ્ઞાન", "કમ્પ્યુટર જ્ઞાન", "ગુજરાતી વ્યાકરણ", "અંગ્રેજી વ્યાકરણ",
             "એપ્ટિટ્યુડ અને રીઝનીંગ", "નિગમને લગતી માહિતી", "મોટર વ્હીકલ એક્ટ", "રોડ સેફ્ટી"
         ];
-
+const subjectFolderMapping = {
+    "સામાન્ય જ્ઞાન": "samanya_gyan",
+    "કમ્પ્યુટર જ્ઞાન": "computer_gyan",
+    "ગુજરાતી વ્યાકરણ": "gujarati_vyakaran",
+    "અંગ્રેજી વ્યાકરણ": "english_grammar",
+    "રોડ સેફ્ટી અને ઓટોમોબાઈલ": "road_safety",
+    "ગણિત અને તાર્કિક કસોટી": "maths_reasoning",
+    "મોટર વ્હીકલ એક્ટ": "motor_vehicle_act",
+    "કંડક્ટર ફરજો અને ફર્સ્ટ એઇડ": "conductor_duties"
+};
         let currentSubject = ""; let currentType = "";
         let isPremiumUser = (localStorage.getItem('gsrtc_is_premium') === 'true');
 
