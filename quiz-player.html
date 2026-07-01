@@ -132,7 +132,7 @@ var isMuted = false; var timerInterval;
 async function loadQuizDataset() {
     try {
         // Aapke GitHub directory folder structure ke mutabiq link:
-        const response = await fetch(`data/${subject}/${type}_${quizNo}.json`);
+        const response = await fetch(`data/${encodeURIComponent(subject)}/${type}_${quizNo}.json`);
         if(!response.ok) throw new Error("File not found");
         quizData = await response.json();
         
